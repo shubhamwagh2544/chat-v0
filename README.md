@@ -1,2 +1,2 @@
 # real-time-chat
-a look into real time chat messaging platform
+a simple chat application using websockets in nodejs
