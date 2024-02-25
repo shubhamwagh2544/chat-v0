@@ -1,7 +1,7 @@
 import { server as WebSocektServer } from "websocket";
 import http from "http";
 
-let server = http.createServer(function (request: any, response: any) {
+const server = http.createServer(function (request: any, response: any) {
     console.log(new Date() + "received request for" + request.url);
     response.writeHead(404);
     response.end();
@@ -31,13 +31,10 @@ wsServer.on('request', function (request) {
     let connection = request.accept('echo-protocol', request.origin);
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function (message) {
+        // TODO: rate limiting logic here
         if (message.type === 'utf8') {
             console.log('Received Message: ' + message.utf8Data);
             connection.sendUTF(message.utf8Data);
-        }
-        else if (message.type === 'binary') {
-            console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-            connection.sendBytes(message.binaryData);
         }
     });
     connection.on('close', function (reasonCode, description) {
