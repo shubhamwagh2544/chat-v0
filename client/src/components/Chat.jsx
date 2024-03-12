@@ -13,7 +13,17 @@ export default function Chat() {
 
     useEffect(() => {
         socket = io(ENDPOINT);
-        console.log(socket)
+        //console.log(socket)
+
+        socket.emit('join', { name, room }, () => {
+            // callback
+        })
+
+        return () => {
+            socket.emit('disconnect')
+            socket.off()
+        }
+
     }, [ENDPOINT, location.search]);
 
     return (
