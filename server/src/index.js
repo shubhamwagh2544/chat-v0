@@ -26,7 +26,7 @@ app.use(cors({
 app.use(router)
 
 io.on('connection', (socket) => {
-    console.log('we have a new connection!!!')
+    console.log('user joined connection!!!')
 
     socket.on('join', ({ name, room }, callback) => {
         //console.log(name, room)
@@ -42,9 +42,19 @@ io.on('connection', (socket) => {
         callback()
     })
 
+    socket.on('sendMessage', (message, callback) => {
+        const user = getUser(socket.id)
+
+        io.to(user.room).emit('message', { user: user.name, text: message })
+        callback()
+    })
+
     socket.on('disconnect', () => {
         console.log('user left connection!!!')
     })
 })
 
 httpServer.listen(PORT, () => console.log('app is listening on port:', PORT))
+
+// emit: triggers event
+// on: register listener to triggered event
